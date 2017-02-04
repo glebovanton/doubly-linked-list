@@ -1,27 +1,94 @@
 const Node = require('./node');
 
 class LinkedList {
-    constructor() {}
+    constructor() {
+        this.length = 0
+        this._head = null;
+        this._tail = null;
+    }
 
-    append(data) {}
+    append(data) {
+        var node = new Node(data);
+        if (this.length) {
+            this._tail.next = node;
+            node.prev = this._tail;
+            this._tail = node;
 
-    head() {}
+        } else {
+            this._head = node;
+            this._tail = node;
+        }
 
-    tail() {}
+        this.length++;
+        return this;
+    }
 
-    at(index) {}
+    head() {
+        return this._head.data;
+    }
 
-    insertAt(index, data) {}
+    tail() {
+        return this._tail.data;
+    }
 
-    isEmpty() {}
+    at(index) {
+        var cur = this._head;
+        var count = 0;
 
-    clear() {}
+        while (count < index) {
+            cur = cur.next;
+            count++;
+        }
+        return cur.data;
+    }
 
-    deleteAt(index) {}
+    insertAt(index, data) {
+    }
 
-    reverse() {}
+    isEmpty() {
+        if (this.length==0){
+            return true
+        }
+        else {
+            return false
+        }
+    }
 
-    indexOf(data) {}
+    clear() {
+        if (this.isEmpty()) return this;
+        var cur = this._head;
+
+        while (cur.next) {
+            cur.data = null;
+            cur = cur.next;
+            this.length--;
+        }
+
+        this._tail.data = null;
+        this.length--
+        return this;
+    }
+
+    deleteAt(index) {
+    }
+
+    reverse() {
+    }
+
+    indexOf(data) {
+        var cur = this._head;
+        var count = 0;
+
+        while (cur.data) {
+            if (cur.data == data) {
+                return count;
+                break
+            }
+            cur = cur.next;
+            if (!cur) return -1;
+            count++;
+        }
+    }
 }
 
 module.exports = LinkedList;
