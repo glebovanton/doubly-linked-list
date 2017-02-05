@@ -2,7 +2,7 @@ const Node = require('./node');
 
 class LinkedList {
     constructor() {
-        this.length = 0
+        this.length = 0;
         this._head = null;
         this._tail = null;
     }
@@ -43,10 +43,17 @@ class LinkedList {
     }
 
     insertAt(index, data) {
+        var cur = this._tail;
+        while (index < this.length-1){
+            cur = cur.prev;
+            index++;
+        }
+        cur.data = data;
+        return this;
     }
 
     isEmpty() {
-        if (this.length==0){
+        if (!this.length){
             return true
         }
         else {
@@ -65,14 +72,57 @@ class LinkedList {
         }
 
         this._tail.data = null;
-        this.length--
+        this.length--;
         return this;
     }
 
     deleteAt(index) {
+        var cur = this._head,
+            prevNodeToDelete = null,
+            nodeToDelete = null,
+            deletedNode = null,
+            count = 0;
+
+        // use case for single element in list
+        if (this.length == 1) {
+            return this.clear();
+        }
+
+        // use case for _head node deletion
+        if (index == 0) {
+            this._head = cur.next;
+            this._head.prev = null;
+            cur = null;
+            this.length--;
+            return this
+        }
+
+        // usual node deletion
+        while (count < index) {
+            prevNodeToDelete = cur;
+            nodeToDelete = cur.next;
+            cur = cur.next;
+            count++;
+        }
+
+        prevNodeToDelete.next = nodeToDelete.next;
+        nodeToDelete.next.prev = prevNodeToDelete;
+        nodeToDelete = null;
+        this.length--;
+        return this
     }
 
     reverse() {
+        var listVal = [];
+        for(var i = 0; i<this.length; i++){
+            listVal.push(this.at(i));
+        }
+        var listRevVal = listVal.reverse();
+
+        for(i = 0; i < listRevVal.length; i++){
+            this.insertAt(i,listRevVal[i]);
+        }
+        return this;
     }
 
     indexOf(data) {
@@ -82,7 +132,7 @@ class LinkedList {
         while (cur.data) {
             if (cur.data == data) {
                 return count;
-                break
+
             }
             cur = cur.next;
             if (!cur) return -1;
